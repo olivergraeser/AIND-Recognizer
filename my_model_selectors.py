@@ -165,8 +165,10 @@ class SelectorCV(ModelSelector):
     def select(self):
         def calc_cv(model, sequences):
             scores = list()
+            if len(sequences) < 2:
+                import pdb; pdb.set_trace()
             max_splits = min(3, len(sequences))
-            split_method = KFold(random_state=self.random_state, n_splits=max_splits)
+            split_method = KFold(random_state=model.random_state, n_splits=max_splits)
             for cv_train_idx, cv_test_idx in split_method.split(sequences):
                 training_data, training_lengths = combine_sequences(cv_train_idx, sequences)
                 test_data, test_lengths = combine_sequences(cv_test_idx, sequences)
